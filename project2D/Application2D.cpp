@@ -18,13 +18,25 @@ bool Application2D::startup() {
 
 	m_physicsScene = new PhysicsScene();
 	m_physicsScene->setTimeStep(0.01f);
+
+	//Demonstrating Newton's third law
+	m_physicsScene->setGravity(glm::vec2(0, 0));  // turn off gravity
+
+	Sphere* ball1 = new Sphere(glm::vec2(-4, 0), glm::vec2(0, 0), 4.0f, 4, glm::vec4(1, 0, 0, 1));
+	Sphere* ball2 = new Sphere(glm::vec2(4, 0), glm::vec2(0, 0), 4.0f, 4, glm::vec4(0, 1, 0, 1));
+
+	m_physicsScene->addActor(ball1);
+	m_physicsScene->addActor(ball2);
+
+	ball1->applyForceToActor(ball2, glm::vec2(-2, 0));
+	//Demonstrating Newton's third law
 	return true;
 }
 
 void Application2D::shutdown() {
 	delete m_font;
-	delete m_texture;
-	delete m_shipTexture;
+	//delete m_texture;
+	//delete m_shipTexture;
 	delete m_2dRenderer;
 }
 
