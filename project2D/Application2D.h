@@ -2,6 +2,7 @@
 
 #include "Application.h"
 #include "Renderer2D.h"
+#include "PhysicsScene.h"
 
 class Application2D : public aie::Application {
 public:
@@ -23,4 +24,6 @@ protected:
 	aie::Font*			m_font;
 
 	float m_timer;
+
+	PhysicsScene* m_physicsScene;
 };
