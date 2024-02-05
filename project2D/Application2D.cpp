@@ -4,6 +4,9 @@
 #include "Input.h"
 #include <glm\ext.hpp>
 #include "Gizmos.h"
+#include "Rigidbody.h"
+#include "Sphere.h"
+#include "Plane.h"
 
 Application2D::Application2D() {}
 
@@ -19,17 +22,20 @@ bool Application2D::startup() {
 	m_physicsScene = new PhysicsScene();
 	m_physicsScene->setTimeStep(0.01f);
 
-	//Demonstrating Newton's third law
-	m_physicsScene->setGravity(glm::vec2(0, 0));  // turn off gravity
+	//m_physicsScene->setGravity(glm::vec2(0, -9.82f));
+	m_physicsScene->setGravity(glm::vec2(0, 0));
 
-	Sphere* ball1 = new Sphere(glm::vec2(-4, 0), glm::vec2(0, 0), 4.0f, 4, glm::vec4(1, 0, 0, 1));
-	Sphere* ball2 = new Sphere(glm::vec2(4, 0), glm::vec2(0, 0), 4.0f, 4, glm::vec4(0, 1, 0, 1));
+	Sphere* ball1 = new Sphere(glm::vec2(-20, 0), glm::vec2(11.11f, 0), 4, 4, glm::vec4(1, 0, 0, 1));
+	//Sphere* ball2 = new Sphere(glm::vec2(10, 0), glm::vec2(0,0), 4, 4, glm::vec4(0, 1, 0, 1));
+	Plane* plane = new Plane(glm::vec2(-1, 0), -30);
 
 	m_physicsScene->addActor(ball1);
-	m_physicsScene->addActor(ball2);
+	//m_physicsScene->addActor(ball2);
+	m_physicsScene->addActor(plane);
 
-	ball1->applyForceToActor(ball2, glm::vec2(-2, 0));
-	//Demonstrating Newton's third law
+	//ball1->applyForce(glm::vec2(30.0f, 0));
+	//ball2->applyForce(glm::vec2(-15.0f, 0));
+
 	return true;
 }
 

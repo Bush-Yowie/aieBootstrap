@@ -174,10 +174,16 @@
     <ClCompile Include="Application2D.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PhysicsScene.cpp" />
+    <ClCompile Include="Plane.cpp" />
+    <ClCompile Include="Rigidbody.cpp" />
+    <ClCompile Include="Sphere.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application2D.h" />
     <ClInclude Include="PhysicsScene.h" />
+    <ClInclude Include="Plane.h" />
+    <ClInclude Include="Rigidbody.h" />
+    <ClInclude Include="Sphere.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
