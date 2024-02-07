@@ -3,8 +3,7 @@
 #include <glm/glm.hpp>
 #include <vector>
 #include "Gizmos.h"
-
-class PhysicsObject;
+#include "PhysicsObject.h"
 
 class PhysicsScene{
 public:
@@ -20,39 +19,22 @@ public:
 	static bool plane2Plane(PhysicsObject*, PhysicsObject*);
 	static bool sphere2Plane(PhysicsObject*, PhysicsObject*);
 	static bool plane2Sphere(PhysicsObject*, PhysicsObject*);
+	static bool plane2Box(PhysicsObject*, PhysicsObject*);
+	static bool box2Sphere(PhysicsObject*, PhysicsObject*);
+	static bool box2Box(PhysicsObject*, PhysicsObject*);
+	static bool box2Plane(PhysicsObject*, PhysicsObject*);
+	static bool sphere2Box(PhysicsObject*, PhysicsObject*);
 
 	void setGravity(const glm::vec2 gravity) { m_gravity = gravity; }
-	glm::vec2 getGravity() const { return m_gravity; }
+	static glm::vec2 getGravity() { return m_gravity; }
 
 	void setTimeStep(const float timeStep) { m_timeStep = timeStep; }
 	float getTimeStep() const { return m_timeStep; }
+	float getTotalEnergy();
 
 protected:
-	glm::vec2 m_gravity;
+	static glm::vec2 m_gravity;
 	float m_timeStep;
 	std::vector<PhysicsObject*> m_actors;
-	const int SHAPE_COUNT = 2;
+	const int SHAPE_COUNT = 3;
 };
-
-enum ShapeType {
-	PLANE = 0,
-	SPHERE//,
-	//BOX
-};
-
-class PhysicsObject {
-protected:
-	PhysicsObject() {}
-	PhysicsObject(ShapeType a_shapeID) : m_shapeID(a_shapeID) {}
-
-public:
-	virtual void fixedUpdate(glm::vec2 gravity, float timeStep) = 0;
-	virtual void draw() = 0;
-	virtual void resetPosition() {};
-
-	ShapeType getShapeID() {return m_shapeID;}
-
-protected:
-	ShapeType m_shapeID;
-};
-

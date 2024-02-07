@@ -7,6 +7,7 @@
 #include "Rigidbody.h"
 #include "Sphere.h"
 #include "Plane.h"
+#include "Box.h"
 
 Application2D::Application2D() {}
 
@@ -22,16 +23,27 @@ bool Application2D::startup() {
 	m_physicsScene = new PhysicsScene();
 	m_physicsScene->setTimeStep(0.01f);
 
-	//m_physicsScene->setGravity(glm::vec2(0, -9.82f));
-	m_physicsScene->setGravity(glm::vec2(0, 0));
+	//m_physicsScene->setGravity(glm::vec2(0, 0));
 
-	Sphere* ball1 = new Sphere(glm::vec2(-20, 0), glm::vec2(11.11f, 0), 4, 4, glm::vec4(1, 0, 0, 1));
-	//Sphere* ball2 = new Sphere(glm::vec2(10, 0), glm::vec2(0,0), 4, 4, glm::vec4(0, 1, 0, 1));
-	Plane* plane = new Plane(glm::vec2(-1, 0), -30);
+	//Sphere* ball1 = new Sphere(glm::vec2(-20, 0), glm::vec2(25.0f, 0), 4, 4, glm::vec4(1, 0, 0, 1),0);
+	//Sphere* ball2 = new Sphere(glm::vec2(20, 0), glm::vec2(-25.0f,0), 4, 4, glm::vec4(0, 1, 0, 1),0);
+	//Sphere* ball3 = new Sphere(glm::vec2(0, 0), glm::vec2(0.0f,0), 4, 4, glm::vec4(0, 1, 1, 1),0);
+	Box* box = new Box(glm::vec2(-20, 0), glm::vec2(25.0f, 0.0f), 0, 4, glm::vec4(1, 1, 0, 1), 0, glm::vec2(4, 4));
+	//Box* box1 = new Box(glm::vec2(20, 0), glm::vec2(-25.0f, 0.0f), 3, 4, glm::vec4(1, 1, 1, 1), 0, glm::vec2(4, 4));
+	Plane* plane  = new Plane(glm::vec2(0, 1),  -40);
+	Plane* plane1 = new Plane(glm::vec2(0, -1), -40);
+	Plane* plane2 = new Plane(glm::vec2(1, 0),  -90);
+	Plane* plane3 = new Plane(glm::vec2(-1, 0), -90);
 
-	m_physicsScene->addActor(ball1);
+	//m_physicsScene->addActor(ball1);
 	//m_physicsScene->addActor(ball2);
+	//m_physicsScene->addActor(ball3);
+	m_physicsScene->addActor(box);
+	//m_physicsScene->addActor(box1);
 	m_physicsScene->addActor(plane);
+	m_physicsScene->addActor(plane1);
+	m_physicsScene->addActor(plane2);
+	m_physicsScene->addActor(plane3);
 
 	//ball1->applyForce(glm::vec2(30.0f, 0));
 	//ball2->applyForce(glm::vec2(-15.0f, 0));
