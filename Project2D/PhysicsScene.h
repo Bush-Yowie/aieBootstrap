@@ -4,6 +4,7 @@
 #include <vector>
 #include "Gizmos.h"
 #include "PhysicsObject.h"
+#include "Rigidbody.h"
 
 class PhysicsScene{
 public:
@@ -14,6 +15,8 @@ public:
 	void removeActor(PhysicsObject* actor);
 	void update(float dt);
 	void draw();
+
+	static void ApplyContactForces(Rigidbody* body1, Rigidbody* body2, glm::vec2 norm, float pen);
 
 	static bool sphere2Sphere(PhysicsObject*, PhysicsObject*);
 	static bool plane2Plane(PhysicsObject*, PhysicsObject*);
@@ -27,7 +30,6 @@ public:
 
 	void setGravity(const glm::vec2 gravity) { m_gravity = gravity; }
 	static glm::vec2 getGravity() { return m_gravity; }
-
 	void setTimeStep(const float timeStep) { m_timeStep = timeStep; }
 	float getTimeStep() const { return m_timeStep; }
 	float getTotalEnergy();

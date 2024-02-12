@@ -1,12 +1,12 @@
 #include "Plane.h"
 #include <iostream>
 
-Plane::Plane() : PhysicsObject(ShapeType::PLANE) {
+Plane::Plane() : PhysicsObject(ShapeType::PLANE, 0) {
     m_distanceToOrigin = 0;
     m_normal = glm::vec2(0,1);
 }
 
-Plane::Plane(glm::vec2 normal, float distance) : PhysicsObject(ShapeType::PLANE) {
+Plane::Plane(float elasticity, glm::vec2 normal, float distance) : PhysicsObject(ShapeType::PLANE, elasticity) {
     m_normal = normal;
     m_distanceToOrigin = distance;
 }
@@ -36,7 +36,7 @@ void Plane::resolveCollision(Rigidbody* actor2, glm::vec2 contact){
     float velocityIntoPlane = glm::dot(vRel, m_normal);
 
     // perfectly elasticity collisions for now
-    float e = 1;
+    float e = (getElasticity() + actor2->getElasticity()) / 2.0f;
 
     // this is the perpendicular distance we apply the force at relative to the COM, so Torque = F * r
     float r = glm::dot(localContact, glm::vec2(m_normal.y, -m_normal.x));
@@ -53,6 +53,9 @@ void Plane::resolveCollision(Rigidbody* actor2, glm::vec2 contact){
     float kePre = actor2->getKineticEnergy();
 
     actor2->applyForce(force, contact - actor2->getPosition());
+
+    float pen = glm::dot(contact, m_normal) - m_distanceToOrigin;
+    PhysicsScene::ApplyContactForces(actor2, nullptr, m_normal, pen);
 
     float kePost = actor2->getKineticEnergy();
     float deltaKE = kePost - kePre;

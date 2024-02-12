@@ -1,22 +1,22 @@
 #include "Box.h"
 #include <iostream>
 
-Box::Box(glm::vec2 position, glm::vec2 velocity, float orientation, float mass, glm::vec4 colour, float angularVelocity, glm::vec2 extents) : Rigidbody(BOX, position, velocity, orientation, mass, angularVelocity, (1.0f / 12.0f * mass * (extents.x*2) * (extents.y * 2))) {
+Box::Box(float elasticity, glm::vec2 position, glm::vec2 velocity, float orientation, float mass, glm::vec4 colour, float angularVelocity, float linearDrag, float angularDrag, glm::vec2 extents) : Rigidbody(BOX, elasticity, position, velocity, orientation, mass, angularVelocity, (1.0f / 12.0f * mass * (extents.x*2) * (extents.y * 2)), linearDrag, angularDrag) {
 	m_colour = colour;
 	m_extents = extents;
-	m_localX = glm::vec2(0, 0);
-	m_localY = glm::vec2(0, 0);
+	/*m_localX = glm::vec2(0, 0);
+	m_localY = glm::vec2(0, 0);*/
 }
 
-void Box::fixedUpdate(glm::vec2 gravity, float timeStep){
-	Rigidbody::fixedUpdate(gravity, timeStep);
-	//store the local axes
-	float cs = cosf(m_orientation);
-	float sn = sinf(m_orientation);
-	m_localX = glm::normalize(glm::vec2(cs, sn));
-	m_localY = glm::normalize(glm::vec2(-sn, cs));
-    //std::cout << "Box pos: " << m_position.x << ", " << m_position.y << std::endl;
-}
+//void Box::fixedUpdate(glm::vec2 gravity, float timeStep){
+//	Rigidbody::fixedUpdate(gravity, timeStep);
+//	//store the local axes
+//	/*float cs = cosf(m_orientation);
+//	float sn = sinf(m_orientation);
+//	m_localX = glm::normalize(glm::vec2(cs, sn));
+//	m_localY = glm::normalize(glm::vec2(-sn, cs));*/
+//    //std::cout << "Box pos: " << m_position.x << ", " << m_position.y << std::endl;
+//}
 
 void Box::draw(){
 	// if only using rotation

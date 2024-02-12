@@ -8,6 +8,8 @@
 #include "Sphere.h"
 #include "Plane.h"
 #include "Box.h"
+#include "Spring.h"
+#include "SoftBody.h"
 
 Application2D::Application2D() {}
 
@@ -25,28 +27,46 @@ bool Application2D::startup() {
 
 	//m_physicsScene->setGravity(glm::vec2(0, 0));
 
-	//Sphere* ball1 = new Sphere(glm::vec2(-20, 0), glm::vec2(25.0f, 0), 4, 4, glm::vec4(1, 0, 0, 1),0);
-	//Sphere* ball2 = new Sphere(glm::vec2(20, 0), glm::vec2(-25.0f,0), 4, 4, glm::vec4(0, 1, 0, 1),0);
-	//Sphere* ball3 = new Sphere(glm::vec2(0, 0), glm::vec2(0.0f,0), 4, 4, glm::vec4(0, 1, 1, 1),0);
-	Box* box = new Box(glm::vec2(-20, 0), glm::vec2(25.0f, 0.0f), 0, 4, glm::vec4(1, 1, 0, 1), 0, glm::vec2(4, 4));
-	//Box* box1 = new Box(glm::vec2(20, 0), glm::vec2(-25.0f, 0.0f), 3, 4, glm::vec4(1, 1, 1, 1), 0, glm::vec2(4, 4));
-	Plane* plane  = new Plane(glm::vec2(0, 1),  -40);
-	Plane* plane1 = new Plane(glm::vec2(0, -1), -40);
-	Plane* plane2 = new Plane(glm::vec2(1, 0),  -90);
-	Plane* plane3 = new Plane(glm::vec2(-1, 0), -90);
+	//Object Type = Object Type(Elasticity, Position, Velocity, Orientation (IGNORE IF CIRCLE), Mass, Colour, Angular Velocity, Linear Drag, Angular Drag, SHAPE TYPE SPECIFIC VARIABLES)
+	
+	/*Sphere* ball1 = new Sphere(0.8f, glm::vec2(-15, 0), glm::vec2(0.0f, 0), 4, glm::vec4(1, 0, 0, 1),0,0.1f,0.1f,4);
+	Sphere* ball2 = new Sphere(0.8f, glm::vec2(15, 0), glm::vec2(0, 0), 4, glm::vec4(0, 1, 0, 1),0,0.1f,0.1f,4);
+	Sphere* ball3 = new Sphere(0.8f, glm::vec2(0, 0), glm::vec2(0, 0), 4, glm::vec4(0, 0, 1, 1),0,0.1f,0.1f,4);*/
 
-	//m_physicsScene->addActor(ball1);
-	//m_physicsScene->addActor(ball2);
-	//m_physicsScene->addActor(ball3);
-	m_physicsScene->addActor(box);
+	//Box* box = new Box(1,glm::vec2(-20, 0), glm::vec2(25.0f, 0.0f), 0.23, 4, glm::vec4(1, 1, 0, 1), 0,0.1f,0.1f, glm::vec2(4, 4));
+	//Box* box1 = new Box(glm::vec2(20, 0), glm::vec2(-25.0f, 0.0f), 3, 4, glm::vec4(1, 1, 1, 1), 0, glm::vec2(4, 4));
+
+	//Spring* spring = new Spring(ball1, ball3, 3, 0, 1);
+	
+	Plane* plane  = new Plane(0.6f,glm::vec2(0, 1),  -40);
+	Plane* plane1 = new Plane(0.6f, glm::vec2(0, -1), -40);
+	Plane* plane2 = new Plane(0.6f, glm::vec2(1, 0),  -90);
+	Plane* plane3 = new Plane(0.6f, glm::vec2(-1, 0), -90);
+
+	/*m_physicsScene->addActor(ball1);
+	m_physicsScene->addActor(ball2);
+	m_physicsScene->addActor(ball3);*/
+	//m_physicsScene->addActor(box);
 	//m_physicsScene->addActor(box1);
+	//m_physicsScene->addActor(spring);
 	m_physicsScene->addActor(plane);
 	m_physicsScene->addActor(plane1);
 	m_physicsScene->addActor(plane2);
 	m_physicsScene->addActor(plane3);
 
-	//ball1->applyForce(glm::vec2(30.0f, 0));
-	//ball2->applyForce(glm::vec2(-15.0f, 0));
+	//ball3->setKinematic(true);
+
+	//Rope(30);
+
+	std::vector<std::string> sb;
+	sb.push_back("000000");
+	sb.push_back("000000");
+	sb.push_back("00....");
+	sb.push_back("00....");
+	sb.push_back("000000");
+	sb.push_back("000000");
+
+	SoftBody::Build(m_physicsScene, glm::vec2(-50, 0), 5.0f, 10.0f, 10.0f, sb);
 
 	return true;
 }
@@ -87,4 +107,27 @@ void Application2D::draw() {
 	m_2dRenderer->drawText(m_font, "Press ESC to quit", 0, 0);
 	// done drawing sprites
 	m_2dRenderer->end();
+}
+
+void Application2D::Rope(int num){
+	m_physicsScene->setGravity(glm::vec2(0, -9.82f));
+
+	Sphere* prev = nullptr;
+
+	for (int i = 0; i < num; i++){
+		// spawn a sphere to the right and below the previous one, so that the whole rope acts under gravity and swings
+		Sphere* sphere = new Sphere(0.8f, glm::vec2(i * 1, 30 - i * 1.5),glm::vec2(0), 10, glm::vec4(1,0, 0, 1), 2, 0.1f, 0.1f, 0.8f);
+
+		if (i == 0) {
+			sphere->setKinematic(true);
+		}
+		m_physicsScene->addActor(sphere);
+		if (prev)
+			m_physicsScene->addActor(new Spring(sphere, prev, 900, 10, 0.4f));
+		prev = sphere;
+	}
+	// add a kinematic box at an angle for the rope to drape over
+	Box* box = new Box(0.8f,glm::vec2(0, -20), glm::vec2(0), 0.3f, 20, glm::vec4(0, 0, 1, 1),3, 0.1f, 0.1f, glm::vec2(8, 2));
+	box->setKinematic(true);
+	m_physicsScene->addActor(box);
 }

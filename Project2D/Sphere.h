@@ -4,7 +4,7 @@
 
 class Sphere : public Rigidbody{
 public:
-	Sphere(glm::vec2 position, glm::vec2 velocity, float mass, float radius, glm::vec4 colour, float angularVelocity);
+	Sphere(float elasticity, glm::vec2 position, glm::vec2 velocity, float mass, glm::vec4 colour, float angularVelocity, float linearDrag, float angularDrag, float radius);
 	~Sphere() {};
 
 	virtual void draw();
